@@ -1,0 +1,48 @@
+--------------------------------------------
+anaconda相关
+--------------------------------------------
+1.删除环境：conda remove --name 环境名 --all
+创建环境：
+2.nohup ./test.sh > output.log 2>&1 & 可以在退出命令行后保持运行代码
+ps -aux | grep "wzh_train.sh" 查看现在运行的ID号，如果想要终止运行就需要使用kill命令
+
+3.使用nvitop可以更方便查看gpu占用的显存情况
+先使用:pip install nvitop ，然后nvitop即可
+
+-------------------------------------------
+git相关
+-------------------------------------------
+1.git branch -a查看下载的git的所有分支，
+a、绿色的表示本地当前分支
+b、红色的表示远程的分支。
+c、：q退出当前命令行
+2.我配置的代理有问题，如果git无法下载，那就去：设置->网络和Internet->代理 关闭使用代理服务器
+但是后面使用：
+git config --global http.proxy 127.0.0.1:你的端口号 问题好像解决了
+
+--------------------------------------------
+其他tricks
+--------------------------------------------
+1.多GPU系统（例如服务器，可以指定使用哪一个cuda，命令为 torch.cuda.set_device(1) 或者 CUDA_VISIBLE_DEVICES=1 python your_script.py
+这两种方法都是适用于所有代码
+2.服务器是4090,cuda11.7不支持算力8.9，这个时候修改为：（主动降算力，能解决高端显卡与垃圾代码的鸿沟，3DGS代码必用）
+# 比如应对这个报错：ValueError: Unknown CUDA arch (8.9) or GPU not supported
+export TORCH_CUDA_ARCH_LIST=7.5
+nano ~/.bashrc
+export PATH=/usr/local/cuda-11.8/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-11.8/lib64:$LD_LIBRARY_PATH
+source ~/.bashrc
+3.查看电脑上有哪些cuda环境：ls /usr/local/ | grep cuda
+4.要在通过 SSH 连接到服务器后关闭本地终端（或断开 SSH 连接）但仍然保持在服务器上运行的进程，你可以使用 nohup 命令，或者使用 screen 或 tmux 这类终端复用工具。
+5.在使用 CUDA 时，你可以通过设置 CUDA_VISIBLE_DEVICES 环境变量来控制哪些 GPU 对你的程序可见
+6.服务器要使用git命令必须在服务器上配置好ssh key
+7.端口port被占用：Address already in use时，参考：https://blog.csdn.net/qq_67822268/article/details/138544557
+8.3dGS的代码现在创建环境需要使用 - urllib3=2.2.1，2.2.2版本会导致报错
+9.报错：RuntimeError: CUDA error: CUBLAS_STATUS_NOT_INITIALIZED when calling `cublasCreate(handle)`
+参考：https://blog.csdn.net/qq_39448884/article/details/135896951
+这种报错什么原因都有：CUDA版本不对，CUDA内存溢出，代码本身输入输出维度不对，可能是硬件问题也可能是软件问题
+10.顶层模块是直接运行的脚本，它不属于任何包。因此，相对导入在顶层模块中无法使用，因为它没有父包的上下文来解析相对路径。
+如果视图运行就会报错：ImportError: attempted relative import with no known parent package
+11.经过测试bev在4090上运行比较困难（我配置没有成功），考虑到目前occ和bev都很需要设备和配置，因此暂时放弃这两个的学习
+
+
