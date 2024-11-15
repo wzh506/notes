@@ -44,5 +44,6 @@ source ~/.bashrc
 10.顶层模块是直接运行的脚本，它不属于任何包。因此，相对导入在顶层模块中无法使用，因为它没有父包的上下文来解析相对路径。
 如果视图运行就会报错：ImportError: attempted relative import with no known parent package
 11.经过测试bev在4090上运行比较困难（我配置没有成功），考虑到目前occ和bev都很需要设备和配置，因此暂时放弃这两个的学习
+12.notes同步老是有网络问题
 
 
